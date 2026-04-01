@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     background: #f7f3ea;
     display: flex;
     flex-direction: column;
@@ -38,14 +38,14 @@ body {
 
 #screens-container {
     display: flex;
-    flex-wrap: nowrap;
-    margin-top: 15px;
+    flex-wrap: wrap; /* permet plusieurs lignes si besoin */
+    width: 100%;
     gap: 10px;
-    overflow-x: auto;
+    justify-content: center;
 }
 
 .screen {
-    width: 500px;
+    width: calc(100% / var(--screen-count) - 10px); /* ajusté pour le nombre d’écrans */
     height: auto;
     background: black;
     image-rendering: pixelated;

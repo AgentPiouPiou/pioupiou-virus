@@ -17,8 +17,13 @@ socket.on("update", (data) => {
 
 socket.on("frames", (data) => {
     screensContainer.innerHTML = "";
-    for (let i in data) {
-        if (i === "mouse") continue; // souris gérée dans le client
+
+    // Compter les écrans
+    const screenKeys = Object.keys(data).filter(k => k !== "mouse");
+    const screenCount = screenKeys.length;
+    document.documentElement.style.setProperty('--screen-count', screenCount);
+
+    for (let i of screenKeys) {
         const img = document.createElement("img");
         img.src = "data:image/jpeg;base64," + data[i];
         img.className = "screen";
