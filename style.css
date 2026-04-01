@@ -38,6 +38,7 @@ body {
 
 #screens-container {
     display: flex;
+    flex-wrap: wrap; /* sur mobile, plusieurs lignes si nécessaire */
     width: 100%;
     gap: 10px;
     justify-content: center;
@@ -45,7 +46,8 @@ body {
 
 .screen {
     object-fit: contain; /* conserve le ratio, pas de rognage */
-    width: calc(100% / var(--screen-count) - 10px);
+    max-width: 100%;     /* ne dépasse jamais la largeur disponible */
+    flex: 1 1 auto;      /* s’adapte automatiquement selon le nombre d’écrans */
     height: auto;
     background: black;
     image-rendering: pixelated;

@@ -20,10 +20,6 @@ socket.on("frames", (data) => {
 
     // récupérer seulement les écrans numériques
     const screenKeys = Object.keys(data).filter(k => k !== "mouse");
-    const screenCount = screenKeys.length;
-
-    // définir variable CSS pour la largeur
-    document.documentElement.style.setProperty('--screen-count', screenCount);
 
     screenKeys.forEach((i) => {
         const img = document.createElement("img");
