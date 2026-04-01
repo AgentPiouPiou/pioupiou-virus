@@ -18,15 +18,17 @@ socket.on("update", (data) => {
 socket.on("frames", (data) => {
     screensContainer.innerHTML = "";
 
-    // Compter les écrans
+    // récupérer seulement les écrans numériques
     const screenKeys = Object.keys(data).filter(k => k !== "mouse");
     const screenCount = screenKeys.length;
+
+    // définir variable CSS pour la largeur
     document.documentElement.style.setProperty('--screen-count', screenCount);
 
-    for (let i of screenKeys) {
+    screenKeys.forEach((i) => {
         const img = document.createElement("img");
         img.src = "data:image/jpeg;base64," + data[i];
         img.className = "screen";
         screensContainer.appendChild(img);
-    }
+    });
 });

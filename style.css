@@ -38,16 +38,15 @@ body {
 
 #screens-container {
     display: flex;
-    flex-wrap: wrap; /* permet plusieurs lignes si besoin */
     width: 100%;
     gap: 10px;
     justify-content: center;
 }
 
 .screen {
-    width: calc(100% / var(--screen-count) - 10px); /* ajusté pour le nombre d’écrans */
+    object-fit: contain; /* conserve le ratio, pas de rognage */
+    width: calc(100% / var(--screen-count) - 10px);
     height: auto;
     background: black;
     image-rendering: pixelated;
-    flex-shrink: 0;
 }
