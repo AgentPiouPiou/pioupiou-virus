@@ -17,6 +17,7 @@ body {
     color: white;
     box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     transition: 0.3s;
+    margin-bottom: 20px; /* <- ajout d’une marge sous le statut */
 }
 
 .red { background: #ff4d4d; }
@@ -38,7 +39,7 @@ body {
 
 #screens-container {
     display: flex;
-    flex-wrap: wrap; /* sur mobile, plusieurs lignes si nécessaire */
+    flex-wrap: wrap; /* permet plusieurs lignes si besoin */
     width: 100%;
     gap: 10px;
     justify-content: center;
