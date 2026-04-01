@@ -11,13 +11,14 @@ socket.on("update", (data) => {
     } else {
         text.innerText = "Aucun appareil connecté";
         card.className = "card red";
-        screensContainer.innerHTML = ""; // nettoyer si déconnecté
+        screensContainer.innerHTML = "";
     }
 });
 
 socket.on("frames", (data) => {
     screensContainer.innerHTML = "";
     for (let i in data) {
+        if (i === "mouse") continue; // on gère la souris sur l'image
         const img = document.createElement("img");
         img.src = "data:image/jpeg;base64," + data[i];
         img.className = "screen";
