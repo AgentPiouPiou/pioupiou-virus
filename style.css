@@ -19,13 +19,8 @@ body {
     transition: 0.3s;
 }
 
-.red {
-    background: #ff4d4d;
-}
-
-.green {
-    background: #69db7c;
-}
+.red { background: #ff4d4d; }
+.green { background: #69db7c; }
 
 .circle {
     width: 12px;
@@ -54,33 +49,4 @@ body {
     height: 225px;
     background: black;
     image-rendering: pixelated;
-}
-
-#controls-button {
-    margin-top: 20px;
-}
-
-#mouse-controls {
-    position: relative;
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-    width: 420px;
-}
-
-#joystick {
-    width: 100px;
-    height: 100px;
-    background: #ccc;
-    border-radius: 50%;
-}
-
-.mouse-btn {
-    width: 80px;
-    height: 50px;
-    margin-left: 10px;
-}
-
-.hidden {
-    display: none;
 }
