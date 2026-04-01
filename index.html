@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Status et écrans</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="card red" id="card">
+    <div class="circle"></div>
+    <span id="text">Aucun appareil connecté</span>
+</div>
+
+<div id="screens-container"></div>
+
+<div id="controls-button">
+    <button id="toggle-controls">Afficher les contrôles souris</button>
+</div>
+
+<div id="mouse-controls" class="hidden">
+    <div id="joystick"></div>
+    <button id="left-click" class="mouse-btn">Click Gauche</button>
+    <button id="right-click" class="mouse-btn">Click Droit</button>
+</div>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #f7f3ea;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+    border-radius: 20px;
+    color: white;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+.red {
+    background: #ff4d4d;
+}
+
+.green {
+    background: #69db7c;
+}
+
+.circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: white;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+#screens-container {
+    display: flex;
+    flex-wrap: nowrap;
+    margin-top: 20px;
+    gap: 10px;
+    overflow-x: auto;
+}
+
+.screen {
+    width: 400px;
+    height: 225px;
+    background: black;
+    image-rendering: pixelated;
+}
+
+#controls-button {
+    margin-top: 20px;
+}
+
+#mouse-controls {
+    position: relative;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    width: 420px;
+}
+
+#joystick {
+    width: 100px;
+    height: 100px;
+    background: #ccc;
+    border-radius: 50%;
+}
+
+.mouse-btn {
+    width: 80px;
+    height: 50px;
+    margin-left: 10px;
+}
+
+.hidden {
+    display: none;
+}
