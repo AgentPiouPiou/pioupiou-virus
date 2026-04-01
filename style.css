@@ -5,14 +5,14 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 10px;
 }
 
 .card {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 20px;
+    padding: 15px 20px;
     border-radius: 20px;
     color: white;
     box-shadow: 0 10px 25px rgba(0,0,0,0.1);
@@ -39,14 +39,15 @@ body {
 #screens-container {
     display: flex;
     flex-wrap: nowrap;
-    margin-top: 20px;
+    margin-top: 15px;
     gap: 10px;
     overflow-x: auto;
 }
 
 .screen {
-    width: 400px;
-    height: 225px;
+    width: 500px;
+    height: auto;
     background: black;
     image-rendering: pixelated;
+    flex-shrink: 0;
 }

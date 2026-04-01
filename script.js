@@ -18,7 +18,7 @@ socket.on("update", (data) => {
 socket.on("frames", (data) => {
     screensContainer.innerHTML = "";
     for (let i in data) {
-        if (i === "mouse") continue; // on gère la souris sur l'image
+        if (i === "mouse") continue; // souris gérée dans le client
         const img = document.createElement("img");
         img.src = "data:image/jpeg;base64," + data[i];
         img.className = "screen";
