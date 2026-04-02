@@ -7,8 +7,15 @@ const card = document.getElementById("card");
 const screensContainer = document.getElementById("screens-container");
 const toggleBtn = document.getElementById("toggle-btn");
 
+const joystick = document.getElementById("joystick");
+const stick = document.getElementById("stick");
+const speedSlider = document.getElementById("speed");
+
 let visible = false;
 let images = {};
+let dragging = false;
+let center = {x:0, y:0};
+const maxDist = 50; // rayon joystick
 
 // ------------------ STATUS ------------------
 socket.on("update", (data) => {
@@ -43,12 +50,6 @@ socket.on("frames", (data) => {
 });
 
 // ------------------ JOYSTICK ------------------
-const joystick = document.getElementById("joystick");
-const stick = document.getElementById("stick");
-let dragging = false;
-let center = {x:0, y:0};
-const maxDist = 50;
-
 function updateCenter() {
     const rect = joystick.getBoundingClientRect();
     center.x = rect.left + rect.width / 2;
@@ -64,6 +65,12 @@ function moveStick(x, y) {
         dy = dy/dist * maxDist;
     }
     stick.style.transform = `translate(${dx}px, ${dy}px)`;
+
+    // --- Envoie direction souris ---
+    const speed = speedSlider.value;
+    const normX = dx / maxDist;
+    const normY = dy / maxDist;
+    socket.emit("mouse_move", {dx: normX * speed, dy: normY * speed});
 }
 
 function resetStick() {

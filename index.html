@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Remote Control</title>
+<title>PiouPiou Virus Béta V0.1</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,10 +20,14 @@
 <!-- Ecrans -->
 <div id="screens-container" style="display:none;"></div>
 
-<!-- Joystick -->
+<!-- Joystick + Slider -->
 <div id="controls">
     <div id="joystick">
         <div id="stick"></div>
+    </div>
+    <div id="slider-container">
+        <label for="speed">Vitesse souris</label>
+        <input type="range" id="speed" min="1" max="20" value="5">
     </div>
 </div>
 

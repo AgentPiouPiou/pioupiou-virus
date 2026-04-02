@@ -77,6 +77,9 @@ button {
 /* Joystick */
 #controls {
     margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #joystick {
@@ -86,6 +89,7 @@ button {
     border-radius: 50%;
     position: relative;
     touch-action: none;
+    margin-bottom: 10px;
 }
 
 #stick {
@@ -97,4 +101,17 @@ button {
     left: 40px;
     top: 40px;
     transition: transform 0.05s linear;
+}
+
+/* Slider */
+#slider-container {
+    width: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+}
+
+#speed {
+    width: 100%;
 }
