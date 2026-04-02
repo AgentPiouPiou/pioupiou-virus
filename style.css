@@ -1,117 +1,19 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* {margin:0; padding:0; box-sizing:border-box;}
+body {font-family:Arial; background:#f7f3ea; display:flex; flex-direction:column; align-items:center; padding:10px;}
 
-body {
-    font-family: Arial;
-    background: #f7f3ea;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-}
+.card {width:100%; max-width:900px; display:flex; justify-content:space-between; align-items:center; background:#ff4d4d; color:white; padding:15px; border-radius:15px; margin-bottom:15px;}
+.card.green {background:#69db7c;}
+.left {display:flex; align-items:center; gap:10px;}
+.circle {width:10px; height:10px; border-radius:50%; background:white;}
+button {padding:8px 12px; border-radius:8px; border:none; cursor:pointer;}
 
-/* Statut */
-.card {
-    width: 100%;
-    max-width: 900px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #ff4d4d;
-    color: white;
-    padding: 15px;
-    border-radius: 15px;
-    margin-bottom: 15px;
-}
+#screens-container {width:100%; max-width:1200px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center;}
+.screen {width:48%; background:black; border-radius:10px;}
+@media (max-width:600px) {.screen {width:100%;}}
 
-.card.green {
-    background: #69db7c;
-}
+#controls {margin-top:20px; display:flex; flex-direction:column; align-items:center;}
+#joystick {width:140px; height:140px; background:rgba(0,0,0,0.1); border-radius:50%; position:relative; touch-action:none; margin-bottom:10px;}
+#stick {width:60px; height:60px; background:#333; border-radius:50%; position:absolute; left:40px; top:40px; transition: transform 0.05s linear;}
 
-.left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.circle {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: white;
-}
-
-/* Bouton */
-button {
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-}
-
-/* Ecrans */
-#screens-container {
-    width: 100%;
-    max-width: 1200px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-}
-
-.screen {
-    width: 48%;
-    background: black;
-    border-radius: 10px;
-}
-
-@media (max-width: 600px) {
-    .screen {
-        width: 100%;
-    }
-}
-
-/* Joystick */
-#controls {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#joystick {
-    width: 140px;
-    height: 140px;
-    background: rgba(0,0,0,0.1);
-    border-radius: 50%;
-    position: relative;
-    touch-action: none;
-    margin-bottom: 10px;
-}
-
-#stick {
-    width: 60px;
-    height: 60px;
-    background: #333;
-    border-radius: 50%;
-    position: absolute;
-    left: 40px;
-    top: 40px;
-    transition: transform 0.05s linear;
-}
-
-/* Slider */
-#slider-container {
-    width: 140px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 12px;
-}
-
-#speed {
-    width: 100%;
-}
+#slider-container {width:140px; display:flex; flex-direction:column; align-items:center; font-size:12px;}
+#speed {width:100%;}
