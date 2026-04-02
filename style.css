@@ -1,31 +1,83 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f7f3ea;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+/* STATUS */
+.card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 20px;
+    border-radius: 20px;
+    color: white;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    transition: 0.3s;
+    margin-bottom: 20px;
+}
+
+.red { background: #ff4d4d; }
+.green { background: #69db7c; }
+
+.circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: white;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* ECRANS */
+#screens-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 10px;
+    justify-content: center;
+}
+
+.screen {
+    object-fit: contain;
+    max-width: 100%;
+    flex: 1 1 auto;
+    height: auto;
+    background: black;
+}
+
+/* 🎮 JOYSTICK */
 #controls {
-    margin-top: 20px;
+    margin-top: 25px;
     display: flex;
     justify-content: center;
 }
 
-.dpad {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+#joystick {
+    width: 140px;
+    height: 140px;
+    background: rgba(0,0,0,0.1);
+    border-radius: 50%;
+    position: relative;
+    touch-action: none;
 }
 
-.dpad div {
-    display: flex;
-    gap: 20px;
-}
-
-.dpad button {
-    font-size: 24px;
-    padding: 15px;
-    border-radius: 10px;
-    border: none;
+#stick {
+    width: 60px;
+    height: 60px;
     background: #333;
-    color: white;
-    cursor: pointer;
-}
-
-.dpad button:active {
-    background: #555;
+    border-radius: 50%;
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    transition: 0.05s;
 }
