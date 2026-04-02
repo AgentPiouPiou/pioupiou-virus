@@ -13,8 +13,7 @@ body {
     padding: 10px;
 }
 
-/* STATUS */
-
+/* Statut */
 .card {
     width: 100%;
     max-width: 900px;
@@ -45,8 +44,7 @@ body {
     background: white;
 }
 
-/* BOUTON */
-
+/* Bouton */
 button {
     padding: 8px 12px;
     border-radius: 8px;
@@ -54,8 +52,7 @@ button {
     cursor: pointer;
 }
 
-/* ECRANS */
-
+/* Ecrans */
 #screens-container {
     width: 100%;
     max-width: 1200px;
@@ -77,8 +74,7 @@ button {
     }
 }
 
-/* JOYSTICK */
-
+/* Joystick */
 #controls {
     margin-top: 20px;
 }
@@ -100,5 +96,5 @@ button {
     position: absolute;
     left: 40px;
     top: 40px;
-    transition: transform 0.1s;
+    transition: transform 0.05s linear;
 }
