@@ -1,4 +1,3 @@
-/* RESET PROPRE */
 * {
     margin: 0;
     padding: 0;
@@ -14,8 +13,7 @@ body {
     padding: 10px;
 }
 
-/* -------- STATUS -------- */
-
+/* STATUS */
 .card {
     width: 100%;
     max-width: 900px;
@@ -27,7 +25,6 @@ body {
     border-radius: 20px;
     color: white;
     box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    transition: 0.3s;
     margin-bottom: 15px;
 }
 
@@ -39,13 +36,6 @@ body {
     height: 10px;
     border-radius: 50%;
     background: white;
-    animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.4); opacity: 0.5; }
-    100% { transform: scale(1); opacity: 1; }
 }
 
 /* bouton */
@@ -55,35 +45,53 @@ body {
     border: none;
     background: white;
     color: black;
-    font-size: 14px;
     cursor: pointer;
 }
 
-/* -------- ECRANS -------- */
+/* 🔥 ECRANS (FLEX AU LIEU DE GRID) */
 
 #screens-container {
     width: 100%;
     max-width: 1200px;
 
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 
     gap: 10px;
 }
 
 .screen {
-    width: 100%;
+    width: 48%; /* 2 écrans côte à côte */
+    max-width: 100%;
     height: auto;
     background: black;
     border-radius: 10px;
     object-fit: contain;
 }
 
-/* -------- JOYSTICK -------- */
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .screen {
+        width: 100%; /* 1 écran par ligne */
+    }
+
+    .card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .card button {
+        width: 100%;
+    }
+}
+
+/* JOYSTICK */
 
 #controls {
     margin-top: 20px;
-    width: 100%;
     display: flex;
     justify-content: center;
 }
@@ -105,40 +113,4 @@ body {
     position: absolute;
     top: 35px;
     left: 35px;
-    transition: 0.05s;
-}
-
-/* -------- MOBILE -------- */
-
-@media (max-width: 600px) {
-
-    body {
-        padding: 5px;
-    }
-
-    .card {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-
-    .card button {
-        width: 100%;
-    }
-
-    #screens-container {
-        grid-template-columns: 1fr; /* 1 écran par ligne */
-    }
-
-    #joystick {
-        width: 140px;
-        height: 140px;
-    }
-
-    #stick {
-        width: 60px;
-        height: 60px;
-        top: 40px;
-        left: 40px;
-    }
 }
