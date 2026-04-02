@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: Arial;
     background: #f7f3ea;
     display: flex;
     flex-direction: column;
@@ -14,22 +14,29 @@ body {
 }
 
 /* STATUS */
+
 .card {
     width: 100%;
     max-width: 900px;
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    gap: 10px;
-    padding: 15px;
-    border-radius: 20px;
+    align-items: center;
+    background: #ff4d4d;
     color: white;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    padding: 15px;
+    border-radius: 15px;
     margin-bottom: 15px;
 }
 
-.red { background: #ff4d4d; }
-.green { background: #69db7c; }
+.card.green {
+    background: #69db7c;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
 .circle {
     width: 10px;
@@ -38,52 +45,34 @@ body {
     background: white;
 }
 
-/* bouton */
-.card button {
+/* BOUTON */
+
+button {
     padding: 8px 12px;
-    border-radius: 10px;
+    border-radius: 8px;
     border: none;
-    background: white;
-    color: black;
     cursor: pointer;
 }
 
-/* 🔥 ECRANS (FLEX AU LIEU DE GRID) */
+/* ECRANS */
 
 #screens-container {
     width: 100%;
     max-width: 1200px;
-
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-
     gap: 10px;
+    justify-content: center;
 }
 
 .screen {
-    width: 48%; /* 2 écrans côte à côte */
-    max-width: 100%;
-    height: auto;
+    width: 48%;
     background: black;
     border-radius: 10px;
-    object-fit: contain;
 }
 
-/* MOBILE */
-
 @media (max-width: 600px) {
-
     .screen {
-        width: 100%; /* 1 écran par ligne */
-    }
-
-    .card {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .card button {
         width: 100%;
     }
 }
@@ -92,23 +81,24 @@ body {
 
 #controls {
     margin-top: 20px;
-    display: flex;
-    justify-content: center;
 }
 
 #joystick {
-    width: 120px;
-    height: 120px;
+    width: 140px;
+    height: 140px;
+    background: rgba(0,0,0,0.1);
     border-radius: 50%;
     position: relative;
+    touch-action: none;
 }
 
 #stick {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
+    background: #333;
     border-radius: 50%;
     position: absolute;
-    top: 35px;
-    left: 35px;
-    transition: 0.05s;
+    left: 40px;
+    top: 40px;
+    transition: transform 0.1s;
 }
