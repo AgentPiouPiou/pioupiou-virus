@@ -11,9 +11,22 @@
 <div class="card red" id="card">
     <div class="circle"></div>
     <span id="text">Aucun appareil connecté</span>
+    <button id="toggle-btn">Afficher écrans</button>
 </div>
 
-<div id="screens-container"></div>
+<div id="screens-container" style="display:none;"></div>
+
+<!-- 🎮 JOYSTICK -->
+<div id="controls" style="display:none;">
+    <div class="dpad">
+        <button data-dir="up">⬆️</button>
+        <div>
+            <button data-dir="left">⬅️</button>
+            <button data-dir="right">➡️</button>
+        </div>
+        <button data-dir="down">⬇️</button>
+    </div>
+</div>
 
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script src="script.js"></script>

@@ -1,55 +1,31 @@
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f7f3ea;
+#controls {
+    margin-top: 20px;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-}
-
-.card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 15px 20px;
-    border-radius: 20px;
-    color: white;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    transition: 0.3s;
-    margin-bottom: 20px; /* <- ajout d’une marge sous le statut */
-}
-
-.red { background: #ff4d4d; }
-.green { background: #69db7c; }
-
-.circle {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: white;
-    animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.4); opacity: 0.5; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-#screens-container {
-    display: flex;
-    flex-wrap: wrap; /* permet plusieurs lignes si besoin */
-    width: 100%;
-    gap: 10px;
     justify-content: center;
 }
 
-.screen {
-    object-fit: contain; /* conserve le ratio, pas de rognage */
-    max-width: 100%;     /* ne dépasse jamais la largeur disponible */
-    flex: 1 1 auto;      /* s’adapte automatiquement selon le nombre d’écrans */
-    height: auto;
-    background: black;
-    image-rendering: pixelated;
+.dpad {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.dpad div {
+    display: flex;
+    gap: 20px;
+}
+
+.dpad button {
+    font-size: 24px;
+    padding: 15px;
+    border-radius: 10px;
+    border: none;
+    background: #333;
+    color: white;
+    cursor: pointer;
+}
+
+.dpad button:active {
+    background: #555;
 }
