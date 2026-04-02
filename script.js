@@ -2,34 +2,24 @@ const joystick = document.getElementById("joystick");
 const stick = document.getElementById("stick");
 
 let dragging = false;
+
 let center = { x: 0, y: 0 };
 let maxDist = 50;
 
-let dx = 0;
-let dy = 0;
-
-// recalcul centre
+// recalcul du centre
 function updateCenter() {
     const rect = joystick.getBoundingClientRect();
     center.x = rect.left + rect.width / 2;
     center.y = rect.top + rect.height / 2;
 }
+
 updateCenter();
 window.addEventListener("resize", updateCenter);
 
-// ------------------ LOOP FLUIDE (60 FPS) ------------------
-
-function loop() {
-    if (dragging) {
-        socket.emit("move_mouse", { dx, dy });
-    }
-    requestAnimationFrame(loop);
-}
-loop();
-
-// ------------------ LOGIQUE JOYSTICK ------------------
+// ------------------ MOUVEMENT VISUEL ------------------
 
 function moveStick(clientX, clientY) {
+
     let offsetX = clientX - center.x;
     let offsetY = clientY - center.y;
 
@@ -41,27 +31,25 @@ function moveStick(clientX, clientY) {
         offsetY = (offsetY / dist) * maxDist;
     }
 
-    // déplacement visuel
+    // déplacement fluide
     stick.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-
-    // 🔥 vitesse progressive (effet trackpad)
-    const power = dist / maxDist;
-
-    dx = Math.round(offsetX * 0.6 * power);
-    dy = Math.round(offsetY * 0.6 * power);
 }
 
-// reset
+// retour centre
 function resetStick() {
+    stick.style.transition = "0.2s";
     stick.style.transform = `translate(0px, 0px)`;
-    dx = 0;
-    dy = 0;
+
+    setTimeout(() => {
+        stick.style.transition = "0.05s";
+    }, 200);
 }
 
 // ------------------ EVENTS SOURIS ------------------
 
 joystick.addEventListener("mousedown", (e) => {
     dragging = true;
+    updateCenter();
     moveStick(e.clientX, e.clientY);
 });
 
@@ -71,6 +59,7 @@ document.addEventListener("mousemove", (e) => {
 });
 
 document.addEventListener("mouseup", () => {
+    if (!dragging) return;
     dragging = false;
     resetStick();
 });
@@ -79,6 +68,7 @@ document.addEventListener("mouseup", () => {
 
 joystick.addEventListener("touchstart", (e) => {
     dragging = true;
+    updateCenter();
     moveStick(e.touches[0].clientX, e.touches[0].clientY);
 });
 
@@ -88,6 +78,7 @@ document.addEventListener("touchmove", (e) => {
 });
 
 document.addEventListener("touchend", () => {
+    if (!dragging) return;
     dragging = false;
     resetStick();
 });

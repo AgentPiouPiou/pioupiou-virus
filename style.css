@@ -99,18 +99,16 @@ body {
 #joystick {
     width: 120px;
     height: 120px;
-    background: rgba(0,0,0,0.1);
     border-radius: 50%;
     position: relative;
-    touch-action: none;
 }
 
 #stick {
     width: 50px;
     height: 50px;
-    background: #333;
     border-radius: 50%;
     position: absolute;
     top: 35px;
     left: 35px;
+    transition: 0.05s;
 }
