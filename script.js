@@ -1,57 +1,93 @@
-document.addEventListener("DOMContentLoaded", () => {
+const joystick = document.getElementById("joystick");
+const stick = document.getElementById("stick");
 
-const socket = io("https://mon-api-mmlc.onrender.com", { transports: ["websocket"] });
+let dragging = false;
+let center = { x: 0, y: 0 };
+let maxDist = 50;
 
-const text = document.getElementById("text");
-const card = document.getElementById("card");
-const screensContainer = document.getElementById("screens-container");
-const toggleBtn = document.getElementById("toggle-btn");
-const controls = document.getElementById("controls");
+let dx = 0;
+let dy = 0;
 
-let images = {};
-let visible = false;
+// recalcul centre
+function updateCenter() {
+    const rect = joystick.getBoundingClientRect();
+    center.x = rect.left + rect.width / 2;
+    center.y = rect.top + rect.height / 2;
+}
+updateCenter();
+window.addEventListener("resize", updateCenter);
 
-// ------------------ BOUTON ------------------
+// ------------------ LOOP FLUIDE (60 FPS) ------------------
 
-toggleBtn.onclick = () => {
-    visible = !visible;
-
-    screensContainer.style.display = visible ? "grid" : "none";
-    controls.style.display = visible ? "flex" : "none";
-
-    toggleBtn.innerText = visible ? "Masquer écrans" : "Afficher écrans";
-};
-
-// ------------------ STATUS ------------------
-
-socket.on("update", (data) => {
-    if (data.connected) {
-        text.innerText = "Appareil connecté";
-        card.className = "card green";
-    } else {
-        text.innerText = "Aucun appareil connecté";
-        card.className = "card red";
-        screensContainer.innerHTML = "";
-        images = {};
+function loop() {
+    if (dragging) {
+        socket.emit("move_mouse", { dx, dy });
     }
+    requestAnimationFrame(loop);
+}
+loop();
+
+// ------------------ LOGIQUE JOYSTICK ------------------
+
+function moveStick(clientX, clientY) {
+    let offsetX = clientX - center.x;
+    let offsetY = clientY - center.y;
+
+    const dist = Math.sqrt(offsetX * offsetX + offsetY * offsetY);
+
+    // limite dans le cercle
+    if (dist > maxDist) {
+        offsetX = (offsetX / dist) * maxDist;
+        offsetY = (offsetY / dist) * maxDist;
+    }
+
+    // déplacement visuel
+    stick.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+
+    // 🔥 vitesse progressive (effet trackpad)
+    const power = dist / maxDist;
+
+    dx = Math.round(offsetX * 0.6 * power);
+    dy = Math.round(offsetY * 0.6 * power);
+}
+
+// reset
+function resetStick() {
+    stick.style.transform = `translate(0px, 0px)`;
+    dx = 0;
+    dy = 0;
+}
+
+// ------------------ EVENTS SOURIS ------------------
+
+joystick.addEventListener("mousedown", (e) => {
+    dragging = true;
+    moveStick(e.clientX, e.clientY);
 });
 
-// ------------------ VIDEO ------------------
-
-socket.on("frames", (data) => {
-    if (!visible) return;
-
-    for (let key in data) {
-
-        if (!images[key]) {
-            const img = document.createElement("img");
-            img.className = "screen";
-            screensContainer.appendChild(img);
-            images[key] = img;
-        }
-
-        images[key].src = "data:image/jpeg;base64," + data[key];
-    }
+document.addEventListener("mousemove", (e) => {
+    if (!dragging) return;
+    moveStick(e.clientX, e.clientY);
 });
 
+document.addEventListener("mouseup", () => {
+    dragging = false;
+    resetStick();
+});
+
+// ------------------ EVENTS MOBILE ------------------
+
+joystick.addEventListener("touchstart", (e) => {
+    dragging = true;
+    moveStick(e.touches[0].clientX, e.touches[0].clientY);
+});
+
+document.addEventListener("touchmove", (e) => {
+    if (!dragging) return;
+    moveStick(e.touches[0].clientX, e.touches[0].clientY);
+});
+
+document.addEventListener("touchend", () => {
+    dragging = false;
+    resetStick();
 });
