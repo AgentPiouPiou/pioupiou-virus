@@ -4,6 +4,8 @@ const text = document.getElementById("text");
 const card = document.getElementById("card");
 const screensContainer = document.getElementById("screens-container");
 
+let images = {};
+
 socket.on("update", (data) => {
     if (data.connected) {
         text.innerText = "Appareil connecté";
@@ -12,19 +14,20 @@ socket.on("update", (data) => {
         text.innerText = "Aucun appareil connecté";
         card.className = "card red";
         screensContainer.innerHTML = "";
+        images = {};
     }
 });
 
 socket.on("frames", (data) => {
-    screensContainer.innerHTML = "";
+    for (let key in data) {
 
-    // récupérer seulement les écrans numériques
-    const screenKeys = Object.keys(data).filter(k => k !== "mouse");
+        if (!images[key]) {
+            const img = document.createElement("img");
+            img.className = "screen";
+            screensContainer.appendChild(img);
+            images[key] = img;
+        }
 
-    screenKeys.forEach((i) => {
-        const img = document.createElement("img");
-        img.src = "data:image/jpeg;base64," + data[i];
-        img.className = "screen";
-        screensContainer.appendChild(img);
-    });
+        images[key].src = "data:image/jpeg;base64," + data[key];
+    }
 });
