@@ -1,72 +1,76 @@
 body {
     margin: 0;
     font-family: Arial;
-    background: #111;
-    overflow: hidden;
+    background: #0f172a;
+    color: white;
 }
 
-/* STATUS */
+/* HEADER */
 .card {
     position: fixed;
     top: 0;
     width: 100%;
-    background: #ff4d4d;
-    color: white;
-    padding: 10px;
+    background: #1e293b;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     z-index: 10;
 }
 
 .card.green {
-    background: #4caf50;
+    background: #16a34a;
 }
 
-/* SCREENS GRID */
+/* SCREENS */
 #screens-container {
-    position: absolute;
-    top: 60px;
-    width: 100%;
-    height: calc(100vh - 60px);
-
+    margin-top: 60px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 4px;
+    gap: 5px;
 }
 
 .screen {
     width: 100%;
-    height: 100%;
-    object-fit: contain;
+    border-radius: 10px;
 }
 
-/* CURSEUR */
-#cursor {
-    width: 12px;
-    height: 12px;
-    background: red;
-    border-radius: 50%;
-    position: absolute;
-    pointer-events: none;
-    z-index: 20;
-}
-
-/* JOYSTICK */
-#joystick {
+/* CONTROLS */
+#controls {
     position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 150px;
-    height: 150px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 50%;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    background: #020617;
 }
 
-#stick {
-    width: 60px;
-    height: 60px;
-    background: #fff;
-    border-radius: 50%;
-    position: absolute;
-    left: 45px;
-    top: 45px;
+/* TRACKPAD */
+#trackpad {
+    width: 100%;
+    height: 180px;
+    background: #111827;
+    border-radius: 15px;
+    margin-bottom: 10px;
+
+    touch-action: none;
+}
+
+/* BOUTONS */
+#mouse-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+#mouse-buttons button {
+    flex: 1;
+    padding: 15px;
+    font-size: 18px;
+    border-radius: 12px;
+    border: none;
+    background: #334155;
+    color: white;
+}
+
+#mouse-buttons button:active {
+    background: #64748b;
 }

@@ -3,21 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Remote</title>
+<title>PïouPiou Virus</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
-<div class="card red" id="card">
+
+<div class="card" id="card">
     <span id="text">Aucun appareil connecté</span>
     <button id="toggle-btn">Afficher</button>
 </div>
 
 <div id="screens-container"></div>
-<div id="cursor"></div>
 
-<div id="joystick">
-    <div id="stick"></div>
+<div id="controls">
+
+    <div id="trackpad"></div>
+
+    <div id="mouse-buttons">
+        <button id="left-click">⬅️</button>
+        <button id="right-click">➡️</button>
+    </div>
+
 </div>
 
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>

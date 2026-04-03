@@ -2,127 +2,75 @@ const socket = io("https://mon-api-mmlc.onrender.com", {
     transports: ["websocket"]
 });
 
-const screensContainer = document.getElementById("screens-container");
-const cursor = document.getElementById("cursor");
+const trackpad = document.getElementById("trackpad");
+const leftBtn = document.getElementById("left-click");
+const rightBtn = document.getElementById("right-click");
 
-let images = {};
-let visible = false;
+let lastX = 0;
+let lastY = 0;
+let touching = false;
 
-// -------- STATUS --------
-socket.on("update", data => {
-    document.getElementById("text").innerText =
-        data.connected ? "Connecté" : "Déconnecté";
+// -------- TRACKPAD --------
+function move(x, y){
+    let dx = x - lastX;
+    let dy = y - lastY;
 
-    document.getElementById("card").className =
-        data.connected ? "card green" : "card red";
-});
+    lastX = x;
+    lastY = y;
 
-// -------- TOGGLE --------
-document.getElementById("toggle-btn").onclick = () => {
-    visible = !visible;
-    screensContainer.style.display = visible ? "grid" : "none";
-};
+    // 🔥 accélération douce
+    dx *= 1.5;
+    dy *= 1.5;
 
-// -------- VIDEO OPTI --------
-socket.on("frames", data => {
-    if (!visible) return;
-
-    Object.keys(data).forEach(k => {
-        if (!images[k]) {
-            let img = document.createElement("img");
-            img.className = "screen";
-            screensContainer.appendChild(img);
-            images[k] = img;
-        }
-        images[k].src = "data:image/jpeg;base64," + data[k];
-    });
-});
-
-// -------- JOYSTICK --------
-const joystick = document.getElementById("joystick");
-const stick = document.getElementById("stick");
-
-let center = {x:0,y:0};
-let dragging = false;
-
-let dx = 0;
-let dy = 0;
-
-const MAX = 60;
-
-function updateCenter(){
-    let r = joystick.getBoundingClientRect();
-    center.x = r.left + r.width/2;
-    center.y = r.top + r.height/2;
+    socket.emit("move_mouse", {dx, dy});
 }
-
-function move(x,y){
-    let mx = x - center.x;
-    let my = y - center.y;
-
-    let dist = Math.sqrt(mx*mx + my*my);
-
-    if(dist > MAX){
-        mx = mx/dist*MAX;
-        my = my/dist*MAX;
-        dist = MAX;
-    }
-
-    stick.style.transform = `translate(${mx}px,${my}px)`;
-
-    // 🔥 vitesse douce
-    let speed = Math.pow(dist/MAX, 1.5);
-
-    dx = mx * speed * 0.4;
-    dy = my * speed * 0.4;
-}
-
-// LOOP souris + curseur
-setInterval(()=>{
-    if(dragging){
-        socket.emit("move_mouse", {dx, dy});
-
-        // curseur local
-        let rect = screensContainer.getBoundingClientRect();
-        cursor.style.left = (rect.left + rect.width/2 + dx*10) + "px";
-        cursor.style.top = (rect.top + rect.height/2 + dy*10) + "px";
-    }
-},16);
-
-function reset(){
-    stick.style.transform = "translate(0,0)";
-    dx = 0;
-    dy = 0;
-}
-
-// EVENTS
-joystick.onmousedown = e=>{
-    dragging = true;
-    updateCenter();
-    move(e.clientX, e.clientY);
-};
-
-document.onmousemove = e=>{
-    if(dragging) move(e.clientX, e.clientY);
-};
-
-document.onmouseup = ()=>{
-    dragging = false;
-    reset();
-};
 
 // MOBILE
-joystick.ontouchstart = e=>{
-    dragging = true;
-    updateCenter();
-    move(e.touches[0].clientX, e.touches[0].clientY);
+trackpad.addEventListener("touchstart", e=>{
+    touching = true;
+    lastX = e.touches[0].clientX;
+    lastY = e.touches[0].clientY;
+});
+
+trackpad.addEventListener("touchmove", e=>{
+    if(!touching) return;
+
+    move(
+        e.touches[0].clientX,
+        e.touches[0].clientY
+    );
+});
+
+trackpad.addEventListener("touchend", ()=>{
+    touching = false;
+});
+
+// PC
+trackpad.addEventListener("mousedown", e=>{
+    touching = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+});
+
+document.addEventListener("mousemove", e=>{
+    if(!touching) return;
+    move(e.clientX, e.clientY);
+});
+
+document.addEventListener("mouseup", ()=>{
+    touching = false;
+});
+
+// -------- CLICS --------
+leftBtn.onclick = () => {
+    socket.emit("click", {button:"left"});
 };
 
-document.ontouchmove = e=>{
-    if(dragging) move(e.touches[0].clientX, e.touches[0].clientY);
+rightBtn.onclick = () => {
+    socket.emit("click", {button:"right"});
 };
 
-document.ontouchend = ()=>{
-    dragging = false;
-    reset();
-};
+// 🔥 DOUBLE CLIC TRACKPAD
+trackpad.addEventListener("dblclick", ()=>{
+    socket.emit("click", {button:"left", double:true});
+});
