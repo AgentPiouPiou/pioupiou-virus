@@ -3,14 +3,13 @@ const socket = io("https://mon-api-mmlc.onrender.com", {
 });
 
 const trackpad = document.getElementById("trackpad");
-const leftBtn = document.getElementById("left-click");
-const rightBtn = document.getElementById("right-click");
 
 let lastX = 0;
 let lastY = 0;
 let touching = false;
+let dragging = false;
 
-// -------- TRACKPAD --------
+// -------- MOVE --------
 function move(x, y){
     let dx = x - lastX;
     let dy = y - lastY;
@@ -18,14 +17,13 @@ function move(x, y){
     lastX = x;
     lastY = y;
 
-    // 🔥 accélération douce
-    dx *= 1.5;
-    dy *= 1.5;
+    dx *= 1.4;
+    dy *= 1.4;
 
     socket.emit("move_mouse", {dx, dy});
 }
 
-// MOBILE
+// -------- TOUCH --------
 trackpad.addEventListener("touchstart", e=>{
     touching = true;
     lastX = e.touches[0].clientX;
@@ -34,18 +32,27 @@ trackpad.addEventListener("touchstart", e=>{
 
 trackpad.addEventListener("touchmove", e=>{
     if(!touching) return;
-
-    move(
-        e.touches[0].clientX,
-        e.touches[0].clientY
-    );
+    move(e.touches[0].clientX, e.touches[0].clientY);
 });
 
 trackpad.addEventListener("touchend", ()=>{
     touching = false;
+
+    if(dragging){
+        socket.emit("click", {button:"left", up:true});
+        dragging = false;
+    }
 });
 
-// PC
+// -------- DOUBLE CLICK HOLD = DRAG --------
+let clickTimeout;
+
+trackpad.addEventListener("dblclick", ()=>{
+    socket.emit("click", {button:"left", down:true});
+    dragging = true;
+});
+
+// -------- PC --------
 trackpad.addEventListener("mousedown", e=>{
     touching = true;
     lastX = e.clientX;
@@ -53,24 +60,23 @@ trackpad.addEventListener("mousedown", e=>{
 });
 
 document.addEventListener("mousemove", e=>{
-    if(!touching) return;
-    move(e.clientX, e.clientY);
+    if(touching) move(e.clientX, e.clientY);
 });
 
 document.addEventListener("mouseup", ()=>{
     touching = false;
+
+    if(dragging){
+        socket.emit("click", {button:"left", up:true});
+        dragging = false;
+    }
 });
 
-// -------- CLICS --------
-leftBtn.onclick = () => {
+// -------- BUTTONS --------
+document.getElementById("left-click").onclick = ()=>{
     socket.emit("click", {button:"left"});
 };
 
-rightBtn.onclick = () => {
+document.getElementById("right-click").onclick = ()=>{
     socket.emit("click", {button:"right"});
 };
-
-// 🔥 DOUBLE CLIC TRACKPAD
-trackpad.addEventListener("dblclick", ()=>{
-    socket.emit("click", {button:"left", double:true});
-});
