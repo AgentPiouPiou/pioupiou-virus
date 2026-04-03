@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PiouPiou Virus</title>
+<title>Remote</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,16 +16,10 @@
     <button id="toggle-btn">Afficher écrans</button>
 </div>
 
-<div id="screens-container" style="display:none;"></div>
+<div id="screens-container"></div>
 
-<div id="controls">
-    <div id="joystick">
-        <div id="stick"></div>
-    </div>
-    <div id="slider-container">
-        <label for="speed">Vitesse souris</label>
-        <input type="range" id="speed" min="1" max="20" value="5">
-    </div>
+<div id="joystick">
+    <div id="stick"></div>
 </div>
 
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
