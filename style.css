@@ -1,104 +1,72 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-}
-
 body {
+    margin: 0;
     font-family: Arial;
-    background: #f7f3ea;
-
+    background: #111;
     overflow: hidden;
-    touch-action: none;
 }
 
 /* STATUS */
 .card {
-    width: 100%;
     position: fixed;
     top: 0;
-    left: 0;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
+    width: 100%;
     background: #ff4d4d;
     color: white;
-    padding: 12px;
+    padding: 10px;
     z-index: 10;
 }
 
 .card.green {
-    background: #69db7c;
+    background: #4caf50;
 }
 
-.left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.circle {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: white;
-}
-
-button {
-    padding: 6px 10px;
-    border-radius: 8px;
-    border: none;
-}
-
-/* SCREENS */
+/* SCREENS GRID */
 #screens-container {
-    margin-top: 70px;
+    position: absolute;
+    top: 60px;
     width: 100%;
-    display: flex;
-    flex-wrap: wrap;
+    height: calc(100vh - 60px);
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 4px;
 }
 
 .screen {
-    width: 50%;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
 }
 
-@media (max-width: 700px) {
-    .screen {
-        width: 100%;
-    }
+/* CURSEUR */
+#cursor {
+    width: 12px;
+    height: 12px;
+    background: red;
+    border-radius: 50%;
+    position: absolute;
+    pointer-events: none;
+    z-index: 20;
 }
 
 /* JOYSTICK */
 #joystick {
-    width: 160px;
-    height: 160px;
-    background: rgba(0,0,0,0.2);
-    border-radius: 50%;
-
     position: fixed;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-
-    touch-action: none;
+    width: 150px;
+    height: 150px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
 }
 
 #stick {
-    width: 70px;
-    height: 70px;
-    background: #333;
+    width: 60px;
+    height: 60px;
+    background: #fff;
     border-radius: 50%;
-
     position: absolute;
     left: 45px;
     top: 45px;
-
-    pointer-events: none;
 }

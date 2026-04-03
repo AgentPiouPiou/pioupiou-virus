@@ -1,145 +1,128 @@
 const socket = io("https://mon-api-mmlc.onrender.com", {
-    transports: ["websocket"],
-    upgrade: false
+    transports: ["websocket"]
 });
 
-const text = document.getElementById("text");
-const card = document.getElementById("card");
 const screensContainer = document.getElementById("screens-container");
-const toggleBtn = document.getElementById("toggle-btn");
+const cursor = document.getElementById("cursor");
 
-const joystick = document.getElementById("joystick");
-const stick = document.getElementById("stick");
-
+let images = {};
 let visible = false;
-let dragging = false;
-
-let center = {x:0,y:0};
-let lastDX = 0;
-let lastDY = 0;
-
-const MAX = 50;
-const DEADZONE = 8;
-
-// -------- CONNECTION FIX --------
-socket.on("connect", () => {
-    setTimeout(() => {
-        socket.emit("status_check");
-    }, 500);
-});
 
 // -------- STATUS --------
-socket.on("update", (data) => {
-    if (data.connected) {
-        text.innerText = "Appareil connecté";
-        card.classList.add("green");
-    } else {
-        text.innerText = "Aucun appareil connecté";
-        card.classList.remove("green");
-    }
+socket.on("update", data => {
+    document.getElementById("text").innerText =
+        data.connected ? "Connecté" : "Déconnecté";
+
+    document.getElementById("card").className =
+        data.connected ? "card green" : "card red";
 });
 
 // -------- TOGGLE --------
-toggleBtn.addEventListener("click", () => {
+document.getElementById("toggle-btn").onclick = () => {
     visible = !visible;
-    screensContainer.style.display = visible ? "flex" : "none";
-});
+    screensContainer.style.display = visible ? "grid" : "none";
+};
 
-// -------- VIDEO --------
-socket.on("frames", (data) => {
+// -------- VIDEO OPTI --------
+socket.on("frames", data => {
     if (!visible) return;
 
-    screensContainer.innerHTML = "";
-
-    Object.keys(data).forEach(key => {
-        const img = document.createElement("img");
-        img.className = "screen";
-        img.src = "data:image/jpeg;base64," + data[key];
-        screensContainer.appendChild(img);
+    Object.keys(data).forEach(k => {
+        if (!images[k]) {
+            let img = document.createElement("img");
+            img.className = "screen";
+            screensContainer.appendChild(img);
+            images[k] = img;
+        }
+        images[k].src = "data:image/jpeg;base64," + data[k];
     });
 });
 
 // -------- JOYSTICK --------
+const joystick = document.getElementById("joystick");
+const stick = document.getElementById("stick");
+
+let center = {x:0,y:0};
+let dragging = false;
+
+let dx = 0;
+let dy = 0;
+
+const MAX = 60;
+
 function updateCenter(){
-    const r = joystick.getBoundingClientRect();
+    let r = joystick.getBoundingClientRect();
     center.x = r.left + r.width/2;
     center.y = r.top + r.height/2;
 }
 
 function move(x,y){
-    let dx = x - center.x;
-    let dy = y - center.y;
+    let mx = x - center.x;
+    let my = y - center.y;
 
-    let dist = Math.sqrt(dx*dx + dy*dy);
+    let dist = Math.sqrt(mx*mx + my*my);
 
     if(dist > MAX){
-        dx = dx/dist*MAX;
-        dy = dy/dist*MAX;
+        mx = mx/dist*MAX;
+        my = my/dist*MAX;
         dist = MAX;
     }
 
-    if(dist < DEADZONE){
-        dx = 0;
-        dy = 0;
-        dist = 0;
-    }
+    stick.style.transform = `translate(${mx}px,${my}px)`;
 
-    stick.style.transform = `translate(${dx}px,${dy}px)`;
+    // 🔥 vitesse douce
+    let speed = Math.pow(dist/MAX, 1.5);
 
-    let nx = dx/MAX;
-    let ny = dy/MAX;
-
-    let speed = Math.pow(dist/MAX,2);
-
-    lastDX = nx * speed * 25;
-    lastDY = ny * speed * 25;
+    dx = mx * speed * 0.4;
+    dy = my * speed * 0.4;
 }
 
-// 🔥 LOOP FLUIDE
+// LOOP souris + curseur
 setInterval(()=>{
     if(dragging){
-        socket.emit("move_mouse", {dx:lastDX, dy:lastDY});
+        socket.emit("move_mouse", {dx, dy});
+
+        // curseur local
+        let rect = screensContainer.getBoundingClientRect();
+        cursor.style.left = (rect.left + rect.width/2 + dx*10) + "px";
+        cursor.style.top = (rect.top + rect.height/2 + dy*10) + "px";
     }
 },16);
 
-// RESET
 function reset(){
     stick.style.transform = "translate(0,0)";
-    lastDX = 0;
-    lastDY = 0;
+    dx = 0;
+    dy = 0;
 }
 
-// DESKTOP
-joystick.addEventListener("mousedown", e=>{
+// EVENTS
+joystick.onmousedown = e=>{
     dragging = true;
     updateCenter();
     move(e.clientX, e.clientY);
-});
+};
 
-document.addEventListener("mousemove", e=>{
+document.onmousemove = e=>{
     if(dragging) move(e.clientX, e.clientY);
-});
+};
 
-document.addEventListener("mouseup", ()=>{
+document.onmouseup = ()=>{
     dragging = false;
     reset();
-});
+};
 
-// MOBILE FIX
-joystick.addEventListener("touchstart", e=>{
-    e.preventDefault();
+// MOBILE
+joystick.ontouchstart = e=>{
     dragging = true;
     updateCenter();
     move(e.touches[0].clientX, e.touches[0].clientY);
-}, {passive:false});
+};
 
-document.addEventListener("touchmove", e=>{
-    if(!dragging) return;
-    e.preventDefault();
-    move(e.touches[0].clientX, e.touches[0].clientY);
-}, {passive:false});
+document.ontouchmove = e=>{
+    if(dragging) move(e.touches[0].clientX, e.touches[0].clientY);
+};
 
-document.addEventListener("touchend", ()=>{
+document.ontouchend = ()=>{
     dragging = false;
     reset();
-});
+};
