@@ -2,72 +2,89 @@ body {
     margin: 0;
     font-family: Arial;
     background: #f7f3ea;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 /* STATUS */
 .card {
-    width: 95%;
-    max-width: 900px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     background: #ff4d4d;
     color: white;
-    padding: 15px;
-    border-radius: 15px;
-    margin-top: 10px;
+    padding: 12px;
 }
-.card.green { background: #69db7c; }
 
-.left { display:flex; gap:10px; align-items:center; }
+.card.green {
+    background: #69db7c;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
 .circle {
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    background:white;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: white;
+}
+
+button {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: none;
 }
 
 /* SCREENS */
 #screens-container {
-    width:100%;
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:5px;
-    margin-top:10px;
+    margin-top: 70px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
 }
 
 .screen {
-    width:49%;
-    object-fit:contain;
-    border-radius:10px;
+    width: 50%;
+    object-fit: contain;
 }
 
-@media(max-width:600px){
-    .screen { width:100%; }
+@media (max-width: 700px) {
+    .screen {
+        width: 100%;
+    }
 }
 
-/* JOYSTICK */
+/* JOYSTICK MOBILE FIX */
 #joystick {
-    width:140px;
-    height:140px;
-    background:#ddd;
-    border-radius:50%;
-    position:fixed;
-    bottom:20px;
-    left:20px;
+    width: 140px;
+    height: 140px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50%;
+
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+
+    touch-action: none;
 }
 
 #stick {
-    width:60px;
-    height:60px;
-    background:#333;
-    border-radius:50%;
-    position:absolute;
-    left:40px;
-    top:40px;
+    width: 60px;
+    height: 60px;
+    background: #333;
+    border-radius: 50%;
+
+    position: absolute;
+    left: 40px;
+    top: 40px;
 }
