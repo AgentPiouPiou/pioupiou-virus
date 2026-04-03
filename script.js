@@ -1,82 +1,70 @@
 const socket = io("https://mon-api-mmlc.onrender.com", {
-    transports: ["websocket"]
+    transports: ["websocket"],
+    reconnection: true,
+    reconnectionAttempts: 10
 });
 
-const trackpad = document.getElementById("trackpad");
+const screensContainer = document.getElementById("screens-container");
+const text = document.getElementById("text");
+const card = document.getElementById("card");
+const toggleBtn = document.getElementById("toggle-btn");
 
-let lastX = 0;
-let lastY = 0;
-let touching = false;
-let dragging = false;
+let visible = false;
+let images = {};
 
-// -------- MOVE --------
-function move(x, y){
-    let dx = x - lastX;
-    let dy = y - lastY;
-
-    lastX = x;
-    lastY = y;
-
-    dx *= 1.4;
-    dy *= 1.4;
-
-    socket.emit("move_mouse", {dx, dy});
-}
-
-// -------- TOUCH --------
-trackpad.addEventListener("touchstart", e=>{
-    touching = true;
-    lastX = e.touches[0].clientX;
-    lastY = e.touches[0].clientY;
+// 🔥 DEBUG (IMPORTANT)
+socket.on("connect", () => {
+    console.log("✅ CONNECTÉ AU SERVEUR");
+    socket.emit("status_check");
 });
 
-trackpad.addEventListener("touchmove", e=>{
-    if(!touching) return;
-    move(e.touches[0].clientX, e.touches[0].clientY);
+socket.on("disconnect", () => {
+    console.log("❌ DÉCONNECTÉ");
 });
 
-trackpad.addEventListener("touchend", ()=>{
-    touching = false;
+// ------------------ STATUS ------------------
 
-    if(dragging){
-        socket.emit("click", {button:"left", up:true});
-        dragging = false;
+socket.on("update", data => {
+    console.log("STATUS:", data);
+
+    if (data.connected) {
+        text.innerText = "Appareil connecté";
+        card.classList.add("green");
+    } else {
+        text.innerText = "Aucun appareil connecté";
+        card.classList.remove("green");
     }
 });
 
-// -------- DOUBLE CLICK HOLD = DRAG --------
-let clickTimeout;
+// ------------------ TOGGLE ------------------
 
-trackpad.addEventListener("dblclick", ()=>{
-    socket.emit("click", {button:"left", down:true});
-    dragging = true;
-});
+toggleBtn.onclick = () => {
+    visible = !visible;
 
-// -------- PC --------
-trackpad.addEventListener("mousedown", e=>{
-    touching = true;
-    lastX = e.clientX;
-    lastY = e.clientY;
-});
+    screensContainer.style.display = visible ? "grid" : "none";
+};
 
-document.addEventListener("mousemove", e=>{
-    if(touching) move(e.clientX, e.clientY);
-});
+// ------------------ VIDEO ------------------
 
-document.addEventListener("mouseup", ()=>{
-    touching = false;
+socket.on("frames", data => {
+    console.log("FRAMES REÇUES");
 
-    if(dragging){
-        socket.emit("click", {button:"left", up:true});
-        dragging = false;
+    if (!visible) return;
+
+    // 🔥 nettoyage si nombre d'écrans change
+    if (Object.keys(images).length !== Object.keys(data).length) {
+        screensContainer.innerHTML = "";
+        images = {};
     }
+
+    Object.keys(data).forEach(key => {
+        if (!images[key]) {
+            const img = document.createElement("img");
+            img.className = "screen";
+            screensContainer.appendChild(img);
+            images[key] = img;
+        }
+
+        images[key].src = "data:image/jpeg;base64," + data[key];
+    });
 });
-
-// -------- BUTTONS --------
-document.getElementById("left-click").onclick = ()=>{
-    socket.emit("click", {button:"left"});
-};
-
-document.getElementById("right-click").onclick = ()=>{
-    socket.emit("click", {button:"right"});
-};
