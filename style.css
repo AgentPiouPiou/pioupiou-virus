@@ -1,7 +1,19 @@
-body {
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+body {
     font-family: Arial;
     background: #f7f3ea;
+
+    overflow: hidden;
+    touch-action: none;
 }
 
 /* STATUS */
@@ -10,7 +22,6 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 10;
 
     display: flex;
     justify-content: space-between;
@@ -19,6 +30,7 @@ body {
     background: #ff4d4d;
     color: white;
     padding: 12px;
+    z-index: 10;
 }
 
 .card.green {
@@ -50,7 +62,6 @@ button {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
 }
 
 .screen {
@@ -64,27 +75,30 @@ button {
     }
 }
 
-/* JOYSTICK MOBILE FIX */
+/* JOYSTICK */
 #joystick {
-    width: 140px;
-    height: 140px;
+    width: 160px;
+    height: 160px;
     background: rgba(0,0,0,0.2);
     border-radius: 50%;
 
     position: fixed;
     bottom: 20px;
-    left: 20px;
+    left: 50%;
+    transform: translateX(-50%);
 
     touch-action: none;
 }
 
 #stick {
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
     background: #333;
     border-radius: 50%;
 
     position: absolute;
-    left: 40px;
-    top: 40px;
+    left: 45px;
+    top: 45px;
+
+    pointer-events: none;
 }

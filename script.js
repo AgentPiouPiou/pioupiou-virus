@@ -12,21 +12,23 @@ const joystick = document.getElementById("joystick");
 const stick = document.getElementById("stick");
 
 let visible = false;
-let images = {};
 let dragging = false;
 
-let center = {x:0, y:0};
+let center = {x:0,y:0};
 let lastDX = 0;
 let lastDY = 0;
 
 const MAX = 50;
-const DEADZONE = 8; // zone morte
+const DEADZONE = 8;
 
-// ---------------- STATUS FIX MOBILE ----------------
+// -------- CONNECTION FIX --------
 socket.on("connect", () => {
-    console.log("connecté");
+    setTimeout(() => {
+        socket.emit("status_check");
+    }, 500);
 });
 
+// -------- STATUS --------
 socket.on("update", (data) => {
     if (data.connected) {
         text.innerText = "Appareil connecté";
@@ -37,17 +39,17 @@ socket.on("update", (data) => {
     }
 });
 
-// ---------------- BOUTON ----------------
+// -------- TOGGLE --------
 toggleBtn.addEventListener("click", () => {
     visible = !visible;
     screensContainer.style.display = visible ? "flex" : "none";
 });
 
-// ---------------- VIDEO FIX MOBILE ----------------
+// -------- VIDEO --------
 socket.on("frames", (data) => {
     if (!visible) return;
 
-    screensContainer.innerHTML = ""; // reset (fix bug écrans fantômes)
+    screensContainer.innerHTML = "";
 
     Object.keys(data).forEach(key => {
         const img = document.createElement("img");
@@ -57,11 +59,11 @@ socket.on("frames", (data) => {
     });
 });
 
-// ---------------- JOYSTICK ----------------
+// -------- JOYSTICK --------
 function updateCenter(){
     const r = joystick.getBoundingClientRect();
-    center.x = r.left + r.width / 2;
-    center.y = r.top + r.height / 2;
+    center.x = r.left + r.width/2;
+    center.y = r.top + r.height/2;
 }
 
 function move(x,y){
@@ -71,49 +73,43 @@ function move(x,y){
     let dist = Math.sqrt(dx*dx + dy*dy);
 
     if(dist > MAX){
-        dx = dx / dist * MAX;
-        dy = dy / dist * MAX;
+        dx = dx/dist*MAX;
+        dy = dy/dist*MAX;
         dist = MAX;
     }
 
-    // zone morte (précision)
     if(dist < DEADZONE){
         dx = 0;
         dy = 0;
         dist = 0;
     }
 
-    stick.style.transform = `translate(${dx}px, ${dy}px)`;
+    stick.style.transform = `translate(${dx}px,${dy}px)`;
 
-    // NORMALISATION
-    let nx = dx / MAX;
-    let ny = dy / MAX;
+    let nx = dx/MAX;
+    let ny = dy/MAX;
 
-    // COURBE (accélération douce)
-    let speed = Math.pow(dist / MAX, 2); // exponentiel
+    let speed = Math.pow(dist/MAX,2);
 
-    // VITESSE FINALE
     lastDX = nx * speed * 25;
     lastDY = ny * speed * 25;
 }
 
-// envoi CONTINU = ultra fluide
-setInterval(() => {
+// 🔥 LOOP FLUIDE
+setInterval(()=>{
     if(dragging){
-        socket.emit("move_mouse", {
-            dx: lastDX,
-            dy: lastDY
-        });
+        socket.emit("move_mouse", {dx:lastDX, dy:lastDY});
     }
-}, 16); // ~60 FPS
+},16);
 
+// RESET
 function reset(){
     stick.style.transform = "translate(0,0)";
     lastDX = 0;
     lastDY = 0;
 }
 
-// ---- DESKTOP ----
+// DESKTOP
 joystick.addEventListener("mousedown", e=>{
     dragging = true;
     updateCenter();
@@ -129,8 +125,9 @@ document.addEventListener("mouseup", ()=>{
     reset();
 });
 
-// ---- MOBILE (FIX TOTAL) ----
+// MOBILE FIX
 joystick.addEventListener("touchstart", e=>{
+    e.preventDefault();
     dragging = true;
     updateCenter();
     move(e.touches[0].clientX, e.touches[0].clientY);
@@ -138,6 +135,7 @@ joystick.addEventListener("touchstart", e=>{
 
 document.addEventListener("touchmove", e=>{
     if(!dragging) return;
+    e.preventDefault();
     move(e.touches[0].clientX, e.touches[0].clientY);
 }, {passive:false});
 
